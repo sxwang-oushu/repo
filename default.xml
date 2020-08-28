@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <remote
+    name="oushu"
+    fetch="http://oushu.github.com/oushu-io/"
+    pushurl="http://oushu.github.com/oushu-io/"
+    review="http://oushu.github.com/oushu-io/" />
+  <default
+    remote="oushu"
+    revision="master"
+    sync-j="4"          />
+  <project path="hawq" name="hawq" revision="oushu-master" />
+  <project path="hornet" name="hornet" />
+  <project path="hornet-opensource" name="hornet-opensource" />
+  <project path="libhdfs3" name="libhdfs3" />
+</manifest>
