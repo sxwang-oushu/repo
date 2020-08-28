@@ -2,9 +2,7 @@
 <manifest>
   <remote
     name="oushu"
-    fetch="http://oushu.github.com/oushu-io/"
-    pushurl="http://oushu.github.com/oushu-io/"
-    review="http://oushu.github.com/oushu-io/" />
+    fetch="ssh://git@oushu.github.com:oushu-io/" />
   <default
     remote="oushu"
     revision="master"
