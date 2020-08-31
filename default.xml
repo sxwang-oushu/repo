@@ -11,5 +11,4 @@
   <project path="hawq" name="hawq" revision="oushu-master" />
   <project path="hornet" name="hornet" />
   <project path="hornet-opensource" name="hornet-opensource" />
-  <project path="libhdfs3" name="libhdfs3" />
 </manifest>

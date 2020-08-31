@@ -19,12 +19,12 @@
 <configuration>
     <property>
         <name>dfs.namenode.name.dir</name>
-        <value>file:///root/hadoop/dfs/name</value>
+        <value>file:///home/oushu/hadoop/dfs/name</value>
         <description>Specify your dfs namenode dir path</description>
     </property>
     <property>
         <name>dfs.datanode.data.dir</name>
-        <value>file:///root/hadoop/dfs/data</value>
+        <value>file:///home/oushu/hadoop/dfs/data</value>
     </property>
     <property>
         <name>dfs.replication</name>

@@ -184,7 +184,7 @@ export HADOOP_OS_TYPE=${HADOOP_OS_TYPE:-$(uname -s)}
 # Where (primarily) daemon log files are stored.
 # ${HADOOP_HOME}/logs by default.
 # Java property: hadoop.log.dir
-export HADOOP_LOG_DIR=/root/hadoop/logs
+export HADOOP_LOG_DIR=/home/oushu/hadoop/logs
 
 # A string representing this instance of hadoop. $USER by default.
 # This is used in writing log and pid files, so keep that in mind!

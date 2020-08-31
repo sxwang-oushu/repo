@@ -1,27 +1,2 @@
-export PATH=/opt/clang/bin:/opt/cmake/bin:$PATH
-
-export CC=clang
-export CXX=clang++
-export LD=ld.lld
-
-unset CPPFLAGS
-unset CFLAGS
-export CXXFLAGS='-stdlib=libc++'
-export LDFLAGS="-Wl,-rpath,/opt/dependency/package/lib -rtlib=compiler-rt -lgcc_s $LDFLAGS"
-export CPATH=/opt/clang/include/c++/v1/
-export LIBRARY_PATH=/opt/clang/lib
-export LD_LIBRARY_PATH=/opt/clang/lib:$LD_LIBRARY_PATH
-
 source /opt/dependency-clang-x86_64-Linux/package/env.sh
-
-GPHOME=/usr/local/hawq
-export PATH=$GPHOME/bin:$JAVA_HOME/bin:$PATH
-export LD_LIBRARY_PATH=$GPHOME/lib:$GPHOME/lib/perl5/5.28.0/x86_64-linux-thread-multi/CORE:$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH
-export DEPENDENCY_PATH=/opt/dependency/package
-export LD_LIBRARY_PATH=$DEPENDENCY_PATH/lib:$LD_LIBRARY_PATH:/usr/local/lib
-export PERL5LIB=$GPHOME/lib/perl5/5.28.0:$GPHOME/lib/perl5/site_perl/5.28.0
-export PYTHONPATH=$GPHOME/lib/python:$PYTHONPATH
-export OPENSSL_CONF=$GPHOME/etc/openssl.cnf
-export LIBHDFS3_CONF=$GPHOME/etc/hdfs-client.xml
-export LIBYARN_CONF=$GPHOME/etc/yarn-client.xml
-export HAWQSITE_CONF=$GPHOME/etc/hawq-site.xml
+source /usr/local/hawq/greenplum_path.sh
