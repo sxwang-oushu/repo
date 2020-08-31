@@ -1,0 +1,4 @@
+#!/bin/bash
+set -ex
+
+docker run --net=host --privileged --hostname=localhost -v /home/sxwang/project/oushu:/home/oushu/oushu -it --rm oushu
