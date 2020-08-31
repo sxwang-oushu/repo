@@ -1,0 +1,13 @@
+set -ex
+
+cd hornet-opensource
+git checkout master
+cd ..
+
+cd hornet
+git checkout master
+cd ..
+
+cd hawq
+git checkout oushu-master
+cd ..

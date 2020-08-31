@@ -2,29 +2,30 @@ FROM ubuntu:18.04
 
 LABEL maintainer="Sixue Wang"
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
-    sudo \
-    tzdata \
-    bsdmainutils \
-    gawk \
-    curl \
-    git \
-    lcov \
-    less \
-    openssh-server \
-    software-properties-common \
-    wget \
-    pkg-config \
-    xz-utils \
-    uuid-dev \
-    libncurses5-dev \
-    libreadline-dev \
-    openjdk-8-jdk \
-    net-tools \
-    iputils-ping \
-    iproute2 \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+      sudo \
+      tzdata \
+      bsdmainutils \
+      gawk \
+      curl \
+      git \
+      lcov \
+      less \
+      openssh-server \
+      software-properties-common \
+      wget \
+      pkg-config \
+      xz-utils \
+      uuid-dev \
+      libncurses5-dev \
+      libreadline-dev \
+      openjdk-8-jdk \
+      net-tools \
+      iputils-ping \
+      iproute2 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 ARG CMAKE_URL=http://yum.oushu-tech.com/oushurepo/yumrepo/internal/linux/toolchain/cmake-3.12.4-Linux-x86_64.tar.gz
 RUN mkdir /opt/cmake && curl -s $CMAKE_URL | tar xz --strip-components=1 -C /opt/cmake
