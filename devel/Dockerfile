@@ -4,6 +4,8 @@ LABEL maintainer="Sixue Wang"
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+      apport \
+      systemd \
       sudo \
       tzdata \
       bsdmainutils \
@@ -15,6 +17,8 @@ RUN apt-get update && \
       openssh-server \
       software-properties-common \
       wget \
+      tree \
+      vim \
       pkg-config \
       xz-utils \
       uuid-dev \
@@ -26,6 +30,10 @@ RUN apt-get update && \
       iproute2 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Enable coredump
+RUN systemctl enable apport.service && \
+    sysctl -w kernel.core_pattern=core.%u.%t
 
 ARG CMAKE_URL=http://yum.oushu-tech.com/oushurepo/yumrepo/internal/linux/toolchain/cmake-3.12.4-Linux-x86_64.tar.gz
 RUN mkdir /opt/cmake && curl -s $CMAKE_URL | tar xz --strip-components=1 -C /opt/cmake
@@ -87,6 +95,7 @@ RUN echo "y" | ssh-keygen -q -t rsa -P '' -f ~/.ssh/id_rsa && \
 ADD hadoop/* /opt/hadoop/etc/hadoop/
 
 ENV HADOOP_HOME=/opt/hadoop
+ENV HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop/
 ENV PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
 
 RUN hdfs namenode -format
@@ -99,6 +108,7 @@ ENV PATH=/home/oushu/sbin:$PATH
 ENV DEPENDENCY_PATH=/opt/dependency/package
 ENV RUN_UNITTEST=no
 ENV TEST_DB_NAME="hawq_feature_test_db"
+ENV PGDATABASE=$TEST_DB_NAME
 
 ADD --chown=oushu:oushu profile /home/oushu/.profile
 ADD --chown=oushu:oushu bashrc /home/oushu/.bashrc

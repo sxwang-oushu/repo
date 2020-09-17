@@ -3,11 +3,11 @@
   <remote
     name="oushu"
     fetch="ssh://git@oushu.github.com/oushu-io/"
-    pushurl="ssh://git@oushu.github.com/oushu-io/" />
+    pushurl="ssh://git@oushu.github.com/oushu-io" />
   <default
     remote="oushu"
     revision="master"
-    sync-j="4"          />
+    sync-j="4" />
   <project path="hawq" name="hawq" revision="oushu-master" />
   <project path="hornet" name="hornet" />
   <project path="hornet-opensource" name="hornet-opensource" />
