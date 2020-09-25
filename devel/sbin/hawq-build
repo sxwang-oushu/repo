@@ -5,19 +5,6 @@ set -ex
 #export WITH_HORNET_EXECUTOR_ONLY=yes
 export LIBHDFS3_CONF=
 
-WORKSPACE=/home/oushu/oushu
-cd $WORKSPACE
+make install -C /home/oushu/oushu/hawq/src/backend
 
-cd hornet-opensource
-make -j8
-cd ..
-
-cd hornet
-make -j8
-cd ..
-
-cd hawq
-./configure
-make install -j8
-make feature-test -j8
-cd ..
+hawq restart cluster -a

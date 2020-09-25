@@ -1,0 +1,38 @@
+#!/bin/bash
+set -ex
+
+#export RUN_UNITTEST=no
+#export WITH_HORNET_EXECUTOR_ONLY=yes
+export LIBHDFS3_CONF=
+
+WORKSPACE=/home/oushu/oushu
+cd $WORKSPACE
+
+cd hornet-opensource
+make -j8
+cd ..
+
+cd hornet
+make -j8
+cd ..
+
+cd hawq
+./configure
+make install -j8
+make feature-test -j8
+cd ..
+
+source /usr/local/hawq/greenplum_path.sh
+
+hawq init cluster -a
+
+export TEST_DB_NAME="hawq_feature_test_db"
+psql -d postgres -c "create database $TEST_DB_NAME;"
+export PGDATABASE=$TEST_DB_NAME
+psql -c  "alter database $TEST_DB_NAME set lc_messages to 'C';"
+psql -c "alter database $TEST_DB_NAME set lc_monetary to 'C';"
+psql -c  "alter database $TEST_DB_NAME set lc_numeric to 'C';"
+psql -c  "alter database $TEST_DB_NAME set lc_time to 'C';"
+psql -c "alter database $TEST_DB_NAME set timezone_abbreviations to 'Default';"
+psql -c  "alter database $TEST_DB_NAME set timezone to 'PST8PDT';"
+psql -c  "alter database $TEST_DB_NAME set datestyle to 'postgres,MDY';"
