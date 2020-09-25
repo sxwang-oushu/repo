@@ -1,4 +1,4 @@
 #!/bin/bash
 set -ex
 
-/home/oushu/oushu/hawq/src/test/feature-test -gtest_filter="$@"
+/home/oushu/oushu/hawq/src/test/feature/feature-test --gtest_filter="$@"
