@@ -27,13 +27,19 @@ RUN apt-get update && \
       openjdk-8-jdk \
       net-tools \
       iputils-ping \
-      iproute2 && \
+      iproute2 \
+      fuse \
+      # perf
+      linux-tools-$(uname -r) linux-tools-generic && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Enable coredump
 RUN systemctl enable apport.service && \
     sysctl -w kernel.core_pattern=core.%u.%t
+
+# Enable lldb attach
+# RUN echo 0 > /proc/sys/kernel/yama/ptrace_scope
 
 ARG CMAKE_URL=http://yum.oushu-tech.com/oushurepo/yumrepo/internal/linux/toolchain/cmake-3.12.4-Linux-x86_64.tar.gz
 RUN mkdir /opt/cmake && curl -s $CMAKE_URL | tar xz --strip-components=1 -C /opt/cmake
@@ -112,5 +118,7 @@ ENV PGDATABASE=$TEST_DB_NAME
 
 ADD --chown=oushu:oushu profile /home/oushu/.profile
 ADD --chown=oushu:oushu bashrc /home/oushu/.bashrc
+
+ENV DISPLAY=:0
 
 ENTRYPOINT /home/oushu/sbin/entrypoint.sh

@@ -8,7 +8,7 @@
     remote="oushu"
     revision="master"
     sync-j="4" />
-  <project path="hawq" name="hawq" revision="oushu-master" />
+  <project path="hawq" name="oushudb" revision="oushu-master" />
   <project path="hornet" name="hornet" />
   <project path="hornet-opensource" name="hornet-opensource" />
 </manifest>
