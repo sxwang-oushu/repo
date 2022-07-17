@@ -36,7 +36,7 @@ RUN apt-get update && \
 
 # Enable coredump
 RUN systemctl enable apport.service && \
-    sysctl -w kernel.core_pattern=core.%u.%t
+    sysctl -w kernel.core_pattern=/tmp/core.%u.%t
 
 # Enable lldb attach
 # RUN echo 0 > /proc/sys/kernel/yama/ptrace_scope
@@ -49,6 +49,7 @@ ARG HADOOP_URL=https://ftp.riken.jp/net/apache/hadoop/common/hadoop-3.3.0/hadoop
 RUN mkdir /opt/hadoop && curl -s $HADOOP_URL | tar xz --strip-components=1 -C /opt/hadoop
 ARG DEP_URL=http://yumazure.oushu-tech.com:12000/oushurepo/yumrepo/internal/linux/toolchain/dependency-clang-x86_64-Linux.tar.gz
 RUN curl -s $DEP_URL | tar xz -C /opt
+RUN rm /opt/dependency-clang-x86_64-Linux/package/include/magma/cwrapper/magma-client-c.h
 
 # Setup User
 RUN adduser --disabled-password --gecos "" oushu && \
@@ -58,7 +59,8 @@ RUN adduser --disabled-password --gecos "" oushu && \
     chmod a+w /etc/ssh/ssh_config && \
     chmod a+w /etc/ssh/sshd_config && \
     chmod a+w /opt && \
-    install -o oushu -d /usr/local/hawq
+    mkdir /usr/local/oushu && \
+    install -o oushu -d /usr/local/oushu
 
 USER oushu
 WORKDIR /home/oushu
@@ -106,19 +108,19 @@ ENV PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
 
 RUN hdfs namenode -format
 
-# Setup scripts
-ADD --chown=oushu:oushu sbin /home/oushu/sbin/
-ENV PATH=/home/oushu/sbin:$PATH
-
 # Setup environment variable
 ENV DEPENDENCY_PATH=/opt/dependency/package
 ENV RUN_UNITTEST=no
 ENV TEST_DB_NAME="hawq_feature_test_db"
 ENV PGDATABASE=$TEST_DB_NAME
+ENV PGUSER=$USER
 
 ADD --chown=oushu:oushu profile /home/oushu/.profile
 ADD --chown=oushu:oushu bashrc /home/oushu/.bashrc
 
 ENV DISPLAY=:0
+ENV PATH=/home/oushu/oushu/repo/ubuntu/sbin:$PATH
 
-ENTRYPOINT /home/oushu/sbin/entrypoint.sh
+RUN mkdir /tmp/magma_segment
+
+ENTRYPOINT /home/oushu/oushu/repo/ubuntu/sbin/entrypoint.sh

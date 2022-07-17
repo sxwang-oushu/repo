@@ -17,14 +17,37 @@ make -j8
 cd ..
 
 cd hawq
-./configure
+./configure --enable-cassert --with-python
 make install -j8
 make feature-test -j8
 cd ..
 
-source /usr/local/hawq/greenplum_path.sh
+source /usr/local/oushu/oushudb/oushudb_path.sh
 
-hawq init cluster -a
+mkdir -p /usr/local/oushu/conf/oushudb/
+mkdir -p /usr/local/oushu/log/oushudb/admin
+mkdir -p /usr/local/oushu/conf/oushudb/magma_node_conf/
+mkdir -p /usr/local/oushu/conf/oushudb/magma_catalog_conf/
+mkdir -p /home/oushu/tmp/magma_node_data
+mkdir -p /home/oushu/tmp/magma_node_log
+mkdir -p /home/oushu/tmp/magma_catalog_data
+mkdir -p /home/oushu/tmp/magma_catalog_log
+mkdir -p /tmp/magma_catalog
+mkdir -p /tmp/magma_data
+
+cp ./hawq/src/backend/utils/misc/etc/oushudb-site.xml /usr/local/oushu/conf/oushudb/oushudb-site.xml
+#cp ./hawq/src/backend/utils/misc/etc/slaves /usr/local/oushu/conf/oushudb/
+#cp ./hornet/magma/src/magma/utils/magma-nodes.yaml /usr/local/oushu/conf/oushudb/magma-nodes.yaml
+cp ./repo/ubuntu/node-magma-site.xml /usr/local/oushu/conf/oushudb/magma_node_conf/magma-site.xml
+cp ./repo/ubuntu/catalog-magma-site.xml /usr/local/oushu/conf/oushudb/magma_catalog_conf/magma-site.xml
+cp ./hawq/src/backend/utils/misc/etc/hdfs-client.xml /usr/local/oushu/conf/oushudb/hdfs-client.xml
+cp ./repo/ubuntu/oushudb-topology.yaml /usr/local/oushu/conf/oushudb/oushudb-topology.yaml
+cp ./repo/ubuntu/magma-topology.yaml /usr/local/oushu/conf/oushudb/magma-topology.yaml
+cp ./hawq/src/backend/utils/misc/etc/magma-client.xml /usr/local/oushu/conf/oushudb/magma-client.xml
+export MULTI_MASTER_ENABLED=1
+export MULTI_MASTER_ENABLED_IN_INIT_DB=1
+
+oushudb init cluster -a --with_magma
 
 export TEST_DB_NAME="hawq_feature_test_db"
 psql -d postgres -c "create database $TEST_DB_NAME;"

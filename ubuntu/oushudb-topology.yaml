@@ -1,0 +1,13 @@
+nodes:
+  - id: n1
+    addr: localhost
+    label: { region: "A", zone: "A" }
+
+vc:
+  - name: mains
+    vci:
+      - nodes: n1
+  - name: vc_default
+    vci:
+      - name: vci1
+        nodes: n1

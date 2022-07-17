@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <property>
+        <name>topology</name>
+        <value>region_default.AZ_default</value>
+        <description>The data directory for magma node</description>
+    </property>
+    <property>
+        <name>node_data_directory</name>
+        <value>magma_node_data</value>
+        <description>The data directory for magma node</description>
+    </property>
+    <property>
+        <name>node_log_directory</name>
+        <value>magma_node_log</value>
+        <description>The log directory for magma node</description>
+    </property>
+    <property>
+        <name>node_address_host</name>
+        <value>localhost</value>
+        <description>The port magma node listening</description>
+    </property>
+    <property>
+        <name>node_address_port</name>
+        <value>6676</value>
+        <description>The port magma node listening</description>
+    </property>
+    <property>
+        <name>nbuffers</name>
+        <value>10240</value>
+        <description>The buffer number of buffer manager.</description>
+    </property>
+
+    <property>
+        <name>shared_buffer_size_per_table_per_range</name>
+        <value>8388608</value>
+        <description>Ap L0 buffer size of per range per table.</description>
+    </property>
+
+    <property>
+        <name>compact_trigger_ap_ratio_limit</name>
+        <value>0.1</value>
+        <description>The threshold of triggering compact in MAGMAAP format.</description>
+    </property>
+
+    <property>
+        <name>compact_trigger_tp_ratio_limit</name>
+        <value>0.1</value>
+        <description>The threshold of triggering compact in MAGMAAP catalog</description>
+    </property>
+
+    <property>
+        <name>compact_data_worker_limit_pernode</name>
+        <value>4</value>
+        <description>The limit of running concurrent compact workers in one node.</description>
+    </property>
+
+    <property>
+        <name>compact_data_worker_limit_perrg</name>
+        <value>2</value>
+        <description>The limit of running concurrent compact workers in one range group.</description>
+    </property>
+
+    <property>
+        <name>compact_cleanup_worker_limit_perrg</name>
+        <value>4</value>
+        <description>The limit of runnings concurrent compact workers for cleaning up jobs in one range group.</description>
+    </property>
+    <property>
+        <name>compact_tablestats_queue_limit</name>
+        <value>4096</value>
+        <description>The limit of table-stats queue in compact.</description>
+    </property>
+    <property>
+        <name>compact_tablestats_queue_timeout</name>
+        <value>250</value>
+        <description>The timeout in milliseconds of push or pop operation of table-stats queue in compact.</description>
+    </property>
+    <property>
+        <name>compact_collect_interval</name>
+        <value>10000</value>
+        <description>The interval in milliseconds of collecting dropped-tables in compact. </description>
+    </property>
+    <property>
+        <name>compact_clear_interval</name>
+        <value>600000</value>
+        <description>The interval in milliseconds of clearing dropped-tables in compact.</description>
+    </property>
+    <property>
+        <name>compact_sleep_interval_idle</name>
+        <value>500</value>
+        <description>The sleep interval in milliseconds in compact when idle.</description>
+    </property>
+    <property>
+        <name>compact_sleep_interval_normal</name>
+        <value>250</value>
+        <description>The sleep interval in milliseconds in compact when normal.</description>
+    </property>
+    <property>
+        <name>raft_election_timeout</name>
+        <value>120</value>
+        <description>The timeout of raft election in second.</description>
+    </property>
+
+    <property>
+        <name>blacklist_log_threshold</name>
+        <value>81920</value>
+        <description>The maximum gap of an offline node measured by log size in MB behind its corresponding leaders before moving it into blacklist.</description>
+    </property>
+
+    <property>
+        <name>rg_checkpoint_threshold</name>
+        <value>204800</value>
+        <description>The minimum size in KB of accumulated Raft log items should trigger checkpoint in one range group.</description>
+    </property>
+
+    <property>
+        <name>verify_checksum</name>
+        <value>v_checksum</value>
+        <description></description>
+        </property>
+    <property>
+        <name>magma_catalog_client_timeout</name>
+        <value>500</value>
+        <description></description>
+    </property>
+
+    <property>
+        <name>raftlog_checkflush_num</name>
+        <value>100000</value>
+        <description>The minimum log numbber of accumulated Raft log items should trigger checkpoint in one range group.</description>
+    </property>
+
+    <property>
+        <name>rpc_server_work_thread_num</name>
+        <value>8</value>
+    </property>
+    <property>
+        <name>metadata_cache_capacity</name>
+        <value>4096</value>
+    </property>
+
+    <property>
+        <name>log_components</name>
+        <value>dlm</value>
+        <description>The components that allow log output.</description>
+    </property>
+
+    <property>
+        <name>dlm_debug_log_level</name>
+        <value>15</value>
+        <description></description>
+    </property>
+
+</configuration>

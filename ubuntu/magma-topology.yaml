@@ -1,0 +1,27 @@
+nodes:
+ - id: m1
+   addr: localhost
+   label: { region: "regionA", zone: "zoneA"}
+
+vsc:
+ - name: vsc_catalog
+   nodes: m1
+   port: 6666
+   num_ranges: 1
+   num_replicas: 3
+   data_dir: /tmp/magma_catalog
+   log_dir:
+   replica_locations: "regionA.zoneA:3"
+   leader_preferences: "regionA.zoneA"
+   conf_path: /usr/local/oushu/conf/oushudb/magma_catalog_conf
+
+ - name: vsc_default
+   nodes: m1
+   port: 6676
+   num_ranges: 4
+   num_replicas: 3
+   data_dir: /tmp/magma_data
+   log_dir:
+   replica_locations: "regionA.zoneA:3"
+   leader_preferences: "regionA.zoneA"
+   conf_path:

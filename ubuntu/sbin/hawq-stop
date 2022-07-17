@@ -4,3 +4,15 @@ hdfs dfs -rm -r /hawq_default
 rm -rf /home/oushu/hawq-data-directory/*
 ps -ef | grep postgres | grep -v grep | awk '{print $2}'| xargs kill -9
 ps -ef | grep magma | grep -v grep | awk '{print $2}'| xargs kill -9
+
+rm -rf /usr/local/oushu/conf/oushudb/
+rm -rf /usr/local/oushu/log/oushudb/admin
+rm -rf /usr/local/oushu/conf/oushudb/magma_node_conf/
+rm -rf /usr/local/oushu/conf/oushudb/magma_catalog_conf/
+rm -rf /home/oushu/tmp/magma_node_data
+rm -rf /home/oushu/tmp/magma_node_log
+rm -rf /home/oushu/tmp/magma_catalog_data
+rm -rf /home/oushu/tmp/magma_catalog_log
+rm -rf /tmp/magma_catalog
+rm -rf /tmp/magma_data
+rm -rf /home/oushu/hawq-data-directory/
