@@ -12,6 +12,10 @@ cd hornet-opensource
 make -j8
 cd ..
 
+cd hornet-new
+ONLY_COROUTINE=yes make -j8
+cd ..
+
 cd hornet
 make -j8
 cd ..

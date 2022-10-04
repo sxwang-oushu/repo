@@ -8,3 +8,4 @@ export LIBHDFS3_CONF=
 make install -C /home/oushu/oushu/hawq/src/backend
 
 oushudb restart cluster -a
+#oushudb restart main -a
