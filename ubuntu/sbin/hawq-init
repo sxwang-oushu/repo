@@ -9,6 +9,7 @@ WORKSPACE=/home/oushu/oushu
 cd $WORKSPACE
 
 cd hornet-opensource
+#make debug -j8
 make -j8
 cd ..
 
@@ -17,13 +18,14 @@ ONLY_COROUTINE=yes make -j8
 cd ..
 
 cd hornet
+#make debug  -j8
 make -j8
 cd ..
 
 cd hawq
 ./configure --enable-cassert --with-python
 make install -j8
-make feature-test -j8
+#make feature-test -j8
 cd ..
 
 source /usr/local/oushu/oushudb/oushudb_path.sh

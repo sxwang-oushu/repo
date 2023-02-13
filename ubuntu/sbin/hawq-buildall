@@ -8,6 +8,8 @@ export LIBHDFS3_CONF=
 WORKSPACE=/home/oushu/oushu
 cd $WORKSPACE
 
+oushudb stop cluster -a
+
 cd hornet-opensource
 make -j8
 cd ..
@@ -20,4 +22,4 @@ cd hawq
 make install -C src/backend
 cd ..
 
-hawq restart cluster -a
+oushudb start cluster -a

@@ -5,7 +5,10 @@ set -ex
 #export WITH_HORNET_EXECUTOR_ONLY=yes
 export LIBHDFS3_CONF=
 
-make install -C /home/oushu/oushu/hawq/src/backend
+oushudb stop cluster -a
+cd /home/oushu/oushu/hawq/
+make install -j8
+#make install -C /home/oushu/oushu/hawq/src/backend
 
-oushudb restart cluster -a
+oushudb start cluster -a
 #oushudb restart main -a
