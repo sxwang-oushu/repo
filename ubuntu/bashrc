@@ -1,7 +1,5 @@
 ulimit -c 10000000000
 ulimit -n 65535
 
-source /opt/dependency-clang-x86_64-Linux/package/env.sh
-source /usr/local/oushu/oushudb/oushudb_path.sh
-
-export LD_LIBRARY_PATH=/opt/clang/lib:$LD_LIBRARY_PATH
+source /opt/dependency/package/env.sh
+source /usr/local/gpdb/greenplum_path.sh

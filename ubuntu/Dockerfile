@@ -1,14 +1,17 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
 LABEL maintainer="Sixue Wang"
 
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+RUN sed -i 's/\/\/archive.ubuntu.com/\/\/jp.archive.ubuntu.com/g' /etc/apt/sources.list && \
+    sed -i 's/\/\/us.archive.ubuntu.com/\/\/jp.archive.ubuntu.com/g' /etc/apt/sources.list && \
+    sed -i 's/\/\/fr.archive.ubuntu.com/\/\/jp.archive.ubuntu.com/g' /etc/apt/sources.list && \
+    apt update && \
+    DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends \
       apport \
       systemd \
       sudo \
-      tzdata \
-      bsdmainutils \
+      #tzdata \
+      #bsdmainutils \
       gawk \
       curl \
       git \
@@ -20,107 +23,102 @@ RUN apt-get update && \
       tree \
       vim \
       pkg-config \
-      xz-utils \
-      uuid-dev \
-      libncurses5-dev \
-      libreadline-dev \
-      openjdk-8-jdk \
+      cmake \
+      #xz-utils \
+      #uuid-dev \
+      #libncurses5-dev \
+      #libreadline-dev \
+      #openjdk-8-jdk \
       net-tools \
       iputils-ping \
       iproute2 \
       fuse \
+      ccache \
+      build-essential \
+      g++-12 \
+      gcc-12 && \
       # perf
-      linux-tools-$(uname -r) linux-tools-generic && \
-    apt-get clean && \
+      #linux-tools-$(uname -r) linux-tools-generic && \
+    apt clean && \
     rm -rf /var/lib/apt/lists/*
 
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 1230 && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 1230
+
 # Enable coredump
-RUN systemctl enable apport.service && \
-    sysctl -w kernel.core_pattern=/tmp/core.%u.%t
+#RUN systemctl enable apport.service && \
+#    sysctl -w kernel.core_pattern=/tmp/core.%u.%t
 
 # Enable lldb attach
 # RUN echo 0 > /proc/sys/kernel/yama/ptrace_scope
-
-ARG CMAKE_URL=http://yum.oushu-tech.com/oushurepo/yumrepo/internal/linux/toolchain/cmake-3.12.4-Linux-x86_64.tar.gz
-RUN mkdir /opt/cmake && curl -s $CMAKE_URL | tar xz --strip-components=1 -C /opt/cmake
-ARG CLANG_URL=http://yum.oushu-tech.com/oushurepo/yumrepo/internal/linux/toolchain/clang+llvm-8.0.1-x86_64-linux-sles11.3.tar.xz
-RUN mkdir /opt/clang && curl -s $CLANG_URL | tar xJ --strip-components=1 -C /opt/clang
-ARG HADOOP_URL=https://ftp.riken.jp/net/apache/hadoop/common/hadoop-3.3.0/hadoop-3.3.0.tar.gz
-RUN mkdir /opt/hadoop && curl -s $HADOOP_URL | tar xz --strip-components=1 -C /opt/hadoop
-ARG DEP_URL=http://yumazure.oushu-tech.com:12000/oushurepo/yumrepo/internal/linux/toolchain/dependency-clang-x86_64-Linux.tar.gz
-RUN curl -s $DEP_URL | tar xz -C /opt
-RUN rm /opt/dependency-clang-x86_64-Linux/package/include/magma/cwrapper/magma-client-c.h
 
 # Setup User
 RUN adduser --disabled-password --gecos "" oushu && \
     usermod -aG sudo oushu && \
     echo "root:root" | chpasswd && \
     echo "oushu:oushu" | chpasswd && \
-    chmod a+w /etc/ssh/ssh_config && \
-    chmod a+w /etc/ssh/sshd_config && \
-    chmod a+w /opt && \
     mkdir /usr/local/oushu && \
-    install -o oushu -d /usr/local/oushu
+    install -o oushu -d /usr/local/oushu && \
+    mkdir /usr/local/gpdb && \
+    install -o oushu -d /usr/local/gpdb && \
+    install -o oushu -d /opt
+    #chmod a+w /etc/ssh/ssh_config && \
+    #chmod a+w /etc/ssh/sshd_config && \
 
 USER oushu
 WORKDIR /home/oushu
 ENV USER=oushu
 
 # Setup ToolChain
-ENV CC=clang
-ENV CXX=clang++
-ENV LD=ld.lld
+ENV CC=gcc
+ENV CXX=g++
+ENV LD=ld
 
-ENV CPPFLAGS=
-ENV CFLAGS=
-ENV CXXFLAGS='-stdlib=libc++'
-ENV LDFLAGS="-Wl,-rpath,/opt/dependency/package/lib -rtlib=compiler-rt -lgcc_s $LDFLAGS"
-
-ENV CPATH=/opt/clang/include/c++/v1/
-ENV LIBRARY_PATH=/opt/clang/lib
-
-ENV PATH=/opt/clang/bin:/opt/cmake/bin:$PATH
-ENV LD_LIBRARY_PATH=/opt/clang/lib:$LD_LIBRARY_PATH
-
+ENV CFLAGS='-gdwarf-4'
+ENV CXXFLAGS='-gdwarf-4'
+ENV LDFLAGS="-lstdc++"
 
 # Install libhdfs3.git
-ADD --chown=oushu:oushu id_rsa /home/oushu/.ssh/id_rsa
-ADD --chown=oushu:oushu id_rsa.pub /home/oushu/.ssh/id_rsa.pub
-RUN ssh-keyscan github.com >> /home/oushu/.ssh/known_hosts
-RUN cd /tmp && \
-    git clone git@github.com:oushu-io/libhdfs3.git && \
-    cd libhdfs3 && \
-    bash -c "source /opt/dependency-clang-x86_64-Linux/package/env.sh && make -j8" && \
-    cd .. && rm -rf libhdfs3
+#ADD --chown=oushu:oushu id_rsa /home/oushu/.ssh/id_rsa
+#ADD --chown=oushu:oushu id_rsa.pub /home/oushu/.ssh/id_rsa.pub
+#RUN ssh-keyscan github.com >> /home/oushu/.ssh/known_hosts
+#RUN cd /tmp && \
+#    git clone git@github.com:oushu-io/libhdfs3.git && \
+#    cd libhdfs3 && \
+#    bash -c "source /opt/dependency-clang-x86_64-Linux/package/env.sh && make -j8" && \
+#    cd .. && rm -rf libhdfs3
 
 # Setup Hadoop
-ARG PORT=2144
-RUN echo "y" | ssh-keygen -q -t rsa -P '' -f ~/.ssh/id_rsa && \
-    cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys && \
-    echo "    Port $PORT" >> /etc/ssh/ssh_config && \
-    echo "    Port $PORT" >> /etc/ssh/sshd_config
+#ARG HADOOP_URL=https://ftp.riken.jp/net/apache/hadoop/common/hadoop-3.3.0/hadoop-3.3.0.tar.gz
+#RUN mkdir /opt/hadoop && curl -s $HADOOP_URL | tar xz --strip-components=1 -C /opt/hadoop
+#ARG PORT=2144
+#RUN echo "y" | ssh-keygen -q -t rsa -P '' -f ~/.ssh/id_rsa && \
+#    cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys && \
+#    echo "    Port $PORT" >> /etc/ssh/ssh_config && \
+#    echo "    Port $PORT" >> /etc/ssh/sshd_config
 
-ADD hadoop/* /opt/hadoop/etc/hadoop/
+#ADD hadoop/* /opt/hadoop/etc/hadoop/
 
-ENV HADOOP_HOME=/opt/hadoop
-ENV HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop/
-ENV PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
+#ENV HADOOP_HOME=/opt/hadoop
+#ENV HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop/
+#ENV PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
 
-RUN hdfs namenode -format
+#RUN hdfs namenode -format
 
 # Setup environment variable
-ENV DEPENDENCY_PATH=/opt/dependency/package
-ENV RUN_UNITTEST=no
-ENV TEST_DB_NAME="hawq_feature_test_db"
-ENV PGDATABASE=$TEST_DB_NAME
-ENV PGUSER=$USER
+#ENV DEPENDENCY_PATH=/opt/dependency/package
+#ENV RUN_UNITTEST=no
+#ENV TEST_DB_NAME="hawq_feature_test_db"
+#ENV PGDATABASE=$TEST_DB_NAME
+#ENV PGUSER=$USER
 
+ADD --chown=oushu:oushu dependency /opt/dependency
 ADD --chown=oushu:oushu profile /home/oushu/.profile
 ADD --chown=oushu:oushu bashrc /home/oushu/.bashrc
 
 ENV DISPLAY=:0
-ENV PATH=/home/oushu/oushu/repo/ubuntu/sbin:$PATH
+#ENV PATH=/home/oushu/oushu/repo/ubuntu/sbin:$PATH
 
-RUN mkdir /tmp/magma_segment
+#RUN mkdir /tmp/magma_segment
 
-ENTRYPOINT /home/oushu/oushu/repo/ubuntu/sbin/entrypoint.sh
+#ENTRYPOINT /home/oushu/oushu/repo/ubuntu/sbin/entrypoint.sh

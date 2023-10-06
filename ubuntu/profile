@@ -1,2 +1,2 @@
-source /opt/dependency-clang-x86_64-Linux/package/env.sh
-source /usr/local/oushu/oushudb/oushudb_path.sh
+source /opt/dependency/package/env.sh
+source /usr/local/gpdb/greenplum_path.sh
